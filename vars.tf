@@ -27,3 +27,21 @@ variable "routing_rules" {
   description = "Routing rules for the S3 bucket"
   default     = ""
 }
+
+variable "index_document" {
+  type        = string
+  description = "HTML to show at root"
+  default     = "index.html"
+}
+
+variable "error_document" {
+  type        = string
+  description = "HTML to show on 404"
+  default     = "404.html"
+}
+
+variable "tags" {
+  type        = map(string)
+  description = "Tags"
+  default     = {}
+}
