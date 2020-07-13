@@ -18,8 +18,8 @@ variable "allowed_ips" {
 
 variable "refer_secret" {
   type        = string
-  description = "A secret string to authenticate CF requests to S3"
-  default     = "123-VERY-SECRET-123"
+  description = "Authenticate S3 to CloudFront"
+  default     = "Pinning-s3-bucket"
 }
 
 variable "routing_rules" {
