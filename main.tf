@@ -4,6 +4,8 @@ resource "aws_cloudfront_distribution" "cloudfront" {
   is_ipv6_enabled = var.cf_ipv6_enabled
   http_version    = "http2"
 
+  enabled = true
+
   origin {
     origin_id   = "origin-${var.fqdn}"
     domain_name = aws_s3_bucket.main.website_endpoint

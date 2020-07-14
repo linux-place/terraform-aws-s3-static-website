@@ -5,6 +5,12 @@ variable "fqdn" {
   description = "The FQDN of the website and also name of the S3 bucket"
 }
 
+variable "enabled" {
+  type        = bool
+  description = "Enable build of cloudfront"
+  default = true
+}
+
 variable "cf_ipv6_enabled" {
   default = true
   type    = bool
