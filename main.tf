@@ -6,7 +6,7 @@ resource "aws_cloudfront_distribution" "cloudfront" {
 
   origin {
     origin_id   = "origin-${var.fqdn}"
-    domain_name = aws_s3_bucket.main.s3_website_endpoint
+    domain_name = aws_s3_bucket.main.website_endpoint
 
     # https://docs.aws.amazon.com/AmazonCloudFront/latest/
     # DeveloperGuide/distribution-web-values-specify.html
