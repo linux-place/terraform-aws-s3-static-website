@@ -21,6 +21,12 @@ variable "spa_error_response_code" {
   default     = "200"
 }
 
+variable "error_response_code" {
+  type        = string
+  description = "Response code to send on 404"
+  default     = "404"
+}
+
 variable "aliases" {
   type        = list(string)
   description = "Any other domain aliases to add to the CloudFront distribution"
