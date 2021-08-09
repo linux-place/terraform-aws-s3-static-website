@@ -17,3 +17,6 @@ output "cf_hosted_zone_id" {
 output "cf_distribution_id" {
   value = aws_cloudfront_distribution.cloudfront.id
 }
+output "aws_cloudfront_origin_access_identity_iam_arn" {
+  value = aws_cloudfront_origin_access_identity.cloudfront_user.iam_arn
+}
