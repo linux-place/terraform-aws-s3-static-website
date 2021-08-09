@@ -20,57 +20,30 @@ resource "aws_s3_bucket" "main" {
   )
 }
 
+# Block all access outside
+resource "aws_s3_bucket_public_access_block" "s3_block_access" {
+  bucket = aws_s3_bucket.main.id
+
+  block_public_acls   = true
+  block_public_policy = true
+  ignore_public_acls  = true
+  restrict_public_buckets = true
+}
 
 data "aws_iam_policy_document" "bucket_policy" {
   provider = aws.main
 
+  # Allow only CloudFront with OAI set igual below
   statement {
-    sid = "AllowedIPReadAccess"
-
-    actions = [
-      "s3:GetObject",
-    ]
-
+    sid = "AllowCFOriginAccessIdentity"
+    actions   = ["s3:GetObject"]
     resources = [
       "arn:aws:s3:::${var.fqdn}/*",
     ]
 
-    condition {
-      test     = "IpAddress"
-      variable = "aws:SourceIp"
-
-      values = var.allowed_ips
-    }
-
     principals {
-      type        = "*"
-      identifiers = ["*"]
-    }
-  }
-
-  statement {
-    sid = "AllowCFOriginAccess"
-
-    actions = [
-      "s3:GetObject",
-    ]
-
-    resources = [
-      "arn:aws:s3:::${var.fqdn}/*",
-    ]
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:UserAgent"
-
-      values = [
-        var.refer_secret,
-      ]
-    }
-
-    principals {
-      type        = "*"
-      identifiers = ["*"]
+      type        = "AWS"
+      identifiers = [aws_cloudfront_origin_access_identity.cloudfront_user.iam_arn]
     }
   }
 }

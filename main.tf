@@ -8,24 +8,12 @@ resource "aws_cloudfront_distribution" "cloudfront" {
 
   origin {
     origin_id   = "origin-${var.fqdn}"
-    domain_name = aws_s3_bucket.main.website_endpoint
+    domain_name = aws_s3_bucket.main.bucket_regional_domain_name
 
     # https://docs.aws.amazon.com/AmazonCloudFront/latest/
     # DeveloperGuide/distribution-web-values-specify.html
-    custom_origin_config {
-      # "HTTP Only: CloudFront uses only HTTP to access the origin."
-      # "Important: If your origin is an Amazon S3 bucket configured
-      # as a website endpoint, you must choose this option. Amazon S3
-      # doesn't support HTTPS connections for website endpoints."
-      origin_protocol_policy = "http-only"
-
-      http_port  = "80"
-      https_port = "443"
-
-      # TODO: given the origin_protocol_policy set to `http-only`,
-      # not sure what this does...
-      # "If the origin is an Amazon S3 bucket, CloudFront always uses TLSv1.2."
-      origin_ssl_protocols = ["TLSv1.2"]
+    s3_origin_config {
+      origin_access_identity = aws_cloudfront_origin_access_identity.cloudfront_user.cloudfront_access_identity_path
     }
 
     # s3_origin_config is not compatible with S3 website hosting, if this
@@ -89,3 +77,6 @@ resource "aws_cloudfront_distribution" "cloudfront" {
 
   web_acl_id = var.web_acl_id
 }
+
+# User to connect to Private S3 
+resource "aws_cloudfront_origin_access_identity" "cloudfront_user" {}
