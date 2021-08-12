@@ -1,13 +1,18 @@
 
 resource "aws_cloudfront_distribution" "cloudfront" {
-
   is_ipv6_enabled = var.cf_ipv6_enabled
   http_version    = "http2"
 
   enabled = true
 
+  logging_config {
+    include_cookies = var.include_cookies
+    bucket          = var.logging_bucket
+    prefix          = var.logging_bucket_dir_prefix
+  }
+
   origin {
-    origin_id   = "origin-${var.fqdn}"
+    origin_id   = var.origin_id
     domain_name = aws_s3_bucket.main.bucket_regional_domain_name
 
     # https://docs.aws.amazon.com/AmazonCloudFront/latest/
@@ -53,6 +58,7 @@ resource "aws_cloudfront_distribution" "cloudfront" {
       target_origin_id       = i.value["target_origin_id"]
       viewer_protocol_policy = i.value["viewer_protocol_policy"]
 
+      #cache_policy_id           = lookup(i.value, "cache_policy_id", null)
       allowed_methods           = lookup(i.value, "allowed_methods", ["GET", "HEAD", "OPTIONS"])
       cached_methods            = lookup(i.value, "cached_methods", ["GET", "HEAD"])
       compress                  = lookup(i.value, "compress", null)
@@ -80,7 +86,7 @@ resource "aws_cloudfront_distribution" "cloudfront" {
         iterator = l
 
         content {
-          event_type   = l.key
+          event_type   = l.value.event_type
           lambda_arn   = l.value.lambda_arn
           include_body = lookup(l.value, "include_body", null)
         }
@@ -97,6 +103,7 @@ resource "aws_cloudfront_distribution" "cloudfront" {
       target_origin_id       = i.value["target_origin_id"]
       viewer_protocol_policy = i.value["viewer_protocol_policy"]
 
+      #cache_policy_id           = lookup(i.value, "cache_policy_id", null)
       allowed_methods           = lookup(i.value, "allowed_methods", ["GET", "HEAD", "OPTIONS"])
       cached_methods            = lookup(i.value, "cached_methods", ["GET", "HEAD"])
       compress                  = lookup(i.value, "compress", null)
@@ -124,16 +131,13 @@ resource "aws_cloudfront_distribution" "cloudfront" {
         iterator = l
 
         content {
-          event_type   = l.key
+          event_type   = l.value.event_type
           lambda_arn   = l.value.lambda_arn
           include_body = lookup(l.value, "include_body", null)
         }
       }
     }
   }
-
-
-
 
   restrictions {
     geo_restriction {

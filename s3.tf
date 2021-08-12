@@ -12,6 +12,11 @@ resource "aws_s3_bucket" "main" {
 
   force_destroy = var.force_destroy
 
+  logging {
+    target_bucket = var.logging_bucket_s3
+    target_prefix = var.logging_bucket_dir_prefix_s3
+  }
+
   tags = merge(
     var.tags,
     {

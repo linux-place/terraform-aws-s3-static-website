@@ -5,6 +5,11 @@ variable "fqdn" {
   description = "The FQDN of the website and also name of the S3 bucket"
 }
 
+variable "origin_id" {
+  type        = string
+  description = "Origin ID"
+}
+
 variable "enabled" {
   type        = bool
   description = "Enable build of cloudfront"
@@ -56,11 +61,39 @@ variable "web_acl_id" {
   default     = ""
 }
 
-
 variable "cache_behavior" {
   description = "The map of cache behaviors for this distribution. Key `default` will be used as the default cache behavior, all other keys will be used as ordered list of cache behaviors. List from top to bottom in order of precedence. The topmost cache behavior will have precedence 0."
   type        = any
-  default     = null
+}
+
+variable "include_cookies" {
+  type        = bool
+  description = "Include cookies on log"
+  default     = false
+}
+
+variable "logging_bucket" {
+  type        = string
+  description = "Bucket Name for log"
+  default     = ""
+}
+
+variable "logging_bucket_s3" {
+  type        = string
+  description = "Bucket Name for log S3"
+  default     = ""
+}
+
+variable "logging_bucket_dir_prefix" {
+  type        = string
+  description = "Bucket prefix for log Cloudfront"
+  default     = ""
+}
+
+variable "logging_bucket_dir_prefix_s3" {
+  type        = string
+  description = "Bucket frefix for log S3"
+  default     = ""
 }
 
 ### S3
