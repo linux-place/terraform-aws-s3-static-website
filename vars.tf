@@ -31,7 +31,11 @@ variable "spa_error_response_code" {
   description = "Response code to send on 404 for a single page application"
   default     = "200"
 }
-
+variable "override_forbbiden" {
+  type        = bool
+  description = "Set error response code to 403"
+  default     = false
+}
 variable "error_response_code" {
   type        = string
   description = "Response code to send on 404"
