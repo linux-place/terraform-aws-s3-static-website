@@ -44,7 +44,7 @@ resource "aws_cloudfront_distribution" "cloudfront" {
     response_page_path    = "/${var.single_page_application ? var.index_document : var.error_document}"
   }
   dynamic custom_error_response {
-    for_each = var.override_forbbiden == true ? toset([]) : toset([1])
+    for_each = var.override_forbbiden == true ? toset([1]) : toset([0])
     content {
       error_code            = "403"
       error_caching_min_ttl = "300"
