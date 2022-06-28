@@ -13,7 +13,7 @@ variable "origin_id" {
 variable "enabled" {
   type        = bool
   description = "Enable build of cloudfront"
-  default = true
+  default     = true
 }
 
 variable "cf_ipv6_enabled" {
