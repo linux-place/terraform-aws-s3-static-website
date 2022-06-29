@@ -43,6 +43,16 @@ resource "aws_cloudfront_distribution" "cloudfront" {
     response_code         = var.single_page_application ? var.spa_error_response_code : var.error_response_code
     response_page_path    = "/${var.single_page_application ? var.index_document : var.error_document}"
   }
+  dynamic custom_error_response {
+    for_each = var.override_forbidden == true ? toset([1]) : toset([])
+    content {
+      error_code            = "403"
+      error_caching_min_ttl = "300"
+      response_code         = var.single_page_application ? var.spa_error_response_code : var.error_response_code
+      response_page_path    = "/${var.single_page_application ? var.index_document : var.error_document}"
+    }
+  }
+
 
   aliases = concat([var.fqdn], var.aliases)
 

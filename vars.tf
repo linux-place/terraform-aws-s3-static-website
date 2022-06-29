@@ -13,7 +13,7 @@ variable "origin_id" {
 variable "enabled" {
   type        = bool
   description = "Enable build of cloudfront"
-  default = true
+  default     = true
 }
 
 variable "cf_ipv6_enabled" {
@@ -31,7 +31,11 @@ variable "spa_error_response_code" {
   description = "Response code to send on 404 for a single page application"
   default     = "200"
 }
-
+variable "override_forbidden" {
+  type        = bool
+  description = "Set error response code to 403"
+  default     = false
+}
 variable "error_response_code" {
   type        = string
   description = "Response code to send on 404"
